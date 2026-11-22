@@ -773,11 +773,13 @@ addClockNumbers("quizClock");
 
 function setClock(hourId, minuteId, h, m) {
 
+  // La aguja larga indica los minutos.
   document.getElementById(minuteId).style.transform =
     `translateX(-50%) rotate(${m * 6}deg)`;
 
+  // La aguja corta permanece fija en el número de la hora.
   document.getElementById(hourId).style.transform =
-    `translateX(-50%) rotate(${(h % 12) * 30 + m * 0.5}deg)`;
+    `translateX(-50%) rotate(${(h % 12) * 30}deg)`;
 
 }
 
