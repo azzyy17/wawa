@@ -1,0 +1,978 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Aprendo jugando!</title>
+
+<style>
+:root {
+  --ink: #35415b;
+  --purple: #8b78d6;
+  --pink: #f49ab5;
+  --yellow: #f6d98a;
+  --mint: #9bdcc8;
+  --blue: #a9d6f2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  color: var(--ink);
+  background: linear-gradient(
+    145deg,
+    #f8f4ff,
+    #effaf6 52%,
+    #fff8ee
+  );
+  min-height: 100vh;
+}
+
+header {
+  padding: 25px 15px;
+  text-align: center;
+  background: #ffffffdc;
+}
+
+h1 {
+  color: #7868bd;
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  margin: 0;
+}
+
+header p {
+  font-size: 1.1rem;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 15px;
+}
+
+button {
+  border: none;
+  border-radius: 14px;
+  padding: 13px 17px;
+  background: var(--purple);
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  min-height: 46px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:hover {
+  filter: brightness(1.05);
+}
+
+.tab {
+  background: white;
+  color: var(--ink);
+  box-shadow: 0 3px 0 #e5def5;
+}
+
+.tab.active {
+  background: var(--purple);
+  color: white;
+}
+
+.secondary {
+  background: #eae5fa;
+  color: #5b4d91;
+}
+
+.green {
+  background: #63b99e;
+}
+
+main {
+  max-width: 1050px;
+  margin: auto;
+  padding: 0 15px 40px;
+}
+
+.panel {
+  display: none;
+  background: white;
+  border: 2px solid #eee9f8;
+  border-radius: 25px;
+  padding: 25px;
+  box-shadow: 0 12px 30px #51418a0c;
+}
+
+.panel.active {
+  display: block;
+}
+
+h2 {
+  color: #7161b4;
+  font-size: clamp(1.45rem, 5vw, 1.8rem);
+}
+
+.intro {
+  color: #647087;
+}
+
+.card {
+  background: #f7f4ff;
+  border-radius: 20px;
+  padding: 18px;
+  margin: 15px 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+input, select {
+  font: inherit;
+  border: 2px solid #ded8ef;
+  border-radius: 12px;
+  padding: 12px;
+  min-height: 46px;
+  max-width: 100%;
+  background: white;
+  color: var(--ink);
+}
+
+.table-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.fact {
+  background: white;
+  border: 2px solid #eee8fa;
+  border-radius: 16px;
+  padding: 12px;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: bold;
+}
+
+.fact strong {
+  color: #7868bd;
+}
+
+.game-question {
+  font-size: 2.5rem;
+  font-weight: 900;
+  text-align: center;
+  margin: 20px;
+}
+
+.answers {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.answers button {
+  background: var(--pink);
+  min-width: 85px;
+}
+
+.feedback {
+  min-height: 30px;
+  font-weight: bold;
+  margin: 12px 0;
+}
+
+.good {
+  color: #16866a;
+}
+
+.bad {
+  color: #c34d65;
+}
+
+/* RELOJ ANALÓGICO */
+
+.clock-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.clock {
+  width: min(72vw, 310px);
+  height: min(72vw, 310px);
+  position: relative;
+  border-radius: 50%;
+  background: #fffdf8;
+  border: 10px solid #a99bdd;
+  box-shadow: inset 0 0 0 5px #f0ebfa;
+  flex-shrink: 0;
+}
+
+.clock .num {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-weight: 900;
+  font-size: 20px;
+  transform: translate(-50%, -50%);
+}
+
+.hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  transform-origin: 50% 100%;
+  border-radius: 10px;
+  z-index: 3;
+}
+
+.hour {
+  width: 9px;
+  height: 27%;
+  background: #53617a;
+}
+
+.minute {
+  width: 6px;
+  height: 39%;
+  background: #e987a8;
+}
+
+.pin {
+  position: absolute;
+  z-index: 5;
+  width: 16px;
+  height: 16px;
+  background: var(--yellow);
+  border: 3px solid var(--purple);
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.big {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #7868bd;
+}
+
+.time-part {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-weight: bold;
+}
+
+.time-part input,
+.time-part select {
+  width: 95px;
+}
+
+.stars {
+  font-size: 1.5rem;
+  color: #e5b54a;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #67718a;
+}
+
+/* DISEÑO PARA CELULARES */
+
+@media(max-width: 600px) {
+
+  header {
+    padding: 20px 14px;
+  }
+
+  nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+  }
+
+  .tab {
+    padding: 12px 7px;
+    font-size: .9rem;
+  }
+
+  main {
+    padding: 0 10px 30px;
+  }
+
+  .panel {
+    padding: 16px 13px;
+    border-radius: 20px;
+  }
+
+  .clock-wrap {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .clock {
+    width: min(78vw, 280px);
+    height: min(78vw, 280px);
+  }
+
+  .table-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .answers button {
+    flex: 1 1 38%;
+    min-height: 50px;
+  }
+
+  .time-fields button {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🌈 ¡Aprendo jugando!</h1>
+  <p>Matemática divertida para segundo grado</p>
+  <div class="stars">⭐ ⭐ ⭐</div>
+</header>
+
+<nav>
+  <button class="tab active" data-tab="tablas">
+    ✖️ Tablas
+  </button>
+
+  <button class="tab" data-tab="juego">
+    🎮 Desafío
+  </button>
+
+  <button class="tab" data-tab="reloj">
+    🕒 Aprendo la hora
+  </button>
+
+  <button class="tab" data-tab="relojjuego">
+    ⏰ ¿Qué hora es?
+  </button>
+</nav>
+
+<main>
+
+<!-- TABLAS -->
+
+<section class="panel active" id="tablas">
+
+<h2>✖️ Exploramos las tablas</h2>
+
+<p class="intro">
+Elegí una tabla y descubrí sus resultados.
+</p>
+
+<div class="row">
+  <strong>Tabla del:</strong>
+  <select id="tablaSelect"></select>
+  <button class="secondary" id="allTables">
+    Ver todas
+  </button>
+</div>
+
+<div class="table-grid" id="tableGrid"></div>
+
+<div class="card">
+  <strong>💡 ¡Un truquito!</strong>
+  <p id="tip">
+    Multiplicar es sumar varias veces el mismo número.
+  </p>
+</div>
+
+</section>
+
+<!-- JUEGO DE MULTIPLICACIONES -->
+
+<section class="panel" id="juego">
+
+<h2>🎮 Desafío multiplicador</h2>
+
+<p class="intro">
+Resolvé la cuenta y elegí la respuesta correcta.
+</p>
+
+<div class="card" style="text-align:center">
+
+<label>
+  Practicar:
+  <select id="level">
+    <option value="10">Tablas del 1 al 10</option>
+    <option value="5">Tablas del 1 al 5</option>
+  </select>
+</label>
+
+<div class="game-question" id="question">
+3 × 4 = ¿?
+</div>
+
+<div class="answers" id="answers"></div>
+
+<div class="feedback" id="gameFeedback"></div>
+
+<button class="green" id="nextQuestion">
+Siguiente cuenta ➜
+</button>
+
+<p>
+<strong>Estrellas:</strong>
+<span id="score">0</span> ⭐
+</p>
+
+</div>
+</section>
+
+<!-- APRENDER EL RELOJ -->
+
+<section class="panel" id="reloj">
+
+<h2>🕒 Conocemos el reloj</h2>
+
+<p class="intro">
+La aguja corta marca las horas y la larga los minutos.
+</p>
+
+<div class="clock-wrap card">
+
+<div class="clock" id="demoClock">
+  <div class="hand hour" id="demoHour"></div>
+  <div class="hand minute" id="demoMinute"></div>
+  <div class="pin"></div>
+</div>
+
+<div>
+
+<p><strong>Escribí una hora para verla en el reloj:</strong></p>
+
+<div class="row time-fields">
+
+<label class="time-part">
+Hora
+<input type="number" id="timeHour"
+min="0" max="23" value="5">
+</label>
+
+<span class="big">:</span>
+
+<label class="time-part">
+Minutos
+<select id="timeMinute">
+<option value="0">00</option>
+<option value="5">05</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30" selected>30</option>
+<option value="35">35</option>
+<option value="40">40</option>
+<option value="45">45</option>
+<option value="50">50</option>
+<option value="55">55</option>
+</select>
+</label>
+
+<button id="showTime">Mostrar hora</button>
+
+</div>
+
+<p class="big" id="digitalTime">05:30</p>
+
+<p id="timeWords">Son las cinco y media.</p>
+
+</div>
+</div>
+
+<div class="card">
+<strong>🧠 Recordá:</strong>
+<ul>
+<li>El reloj tiene 12 números.</li>
+<li>Una vuelta completa equivale a 60 minutos.</li>
+<li>Cada número representa 5 minutos.</li>
+</ul>
+</div>
+
+</section>
+
+<!-- JUEGO DEL RELOJ -->
+
+<section class="panel" id="relojjuego">
+
+<h2>⏰ ¡Leemos el reloj!</h2>
+
+<p class="intro">
+Observá las agujas y escribí la hora correcta.
+</p>
+
+<div class="clock-wrap card">
+
+<div class="clock" id="quizClock">
+  <div class="hand hour" id="quizHour"></div>
+  <div class="hand minute" id="quizMinute"></div>
+  <div class="pin"></div>
+</div>
+
+<div>
+
+<p><strong>¿Qué hora muestra el reloj?</strong></p>
+
+<p>Escribí la hora y los minutos.</p>
+
+<div class="row time-fields">
+
+<label class="time-part">
+Hora
+<input id="guessHour" type="number"
+min="1" max="12" placeholder="1-12">
+</label>
+
+<span class="big">:</span>
+
+<label class="time-part">
+Minutos
+<select id="guessMinute">
+<option value="">--</option>
+<option value="0">00</option>
+<option value="5">05</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="25">25</option>
+<option value="30">30</option>
+<option value="35">35</option>
+<option value="40">40</option>
+<option value="45">45</option>
+<option value="50">50</option>
+<option value="55">55</option>
+</select>
+</label>
+
+</div>
+
+<div class="row" style="margin-top:12px">
+
+<button id="checkTime">
+Comprobar
+</button>
+
+<button class="secondary" id="newClock">
+Otra hora 🎲
+</button>
+
+</div>
+
+<div class="feedback" id="clockFeedback"></div>
+
+<p>
+<strong>Relojes acertados:</strong>
+<span id="clockScore">0</span> ⭐
+</p>
+
+</div>
+</div>
+
+</section>
+
+</main>
+
+<footer>
+Hecho para aprender con curiosidad 💜
+</footer>
+
+<script>
+
+// NAVEGACIÓN
+
+const tabs = document.querySelectorAll(".tab");
+
+tabs.forEach(btn => {
+
+  btn.addEventListener("click", () => {
+
+    tabs.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    document.querySelectorAll(".panel").forEach(p => {
+      p.classList.remove("active");
+    });
+
+    document.getElementById(btn.dataset.tab)
+      .classList.add("active");
+
+  });
+
+});
+
+
+// CREAR NÚMEROS DEL RELOJ
+
+function addClockNumbers(id) {
+
+  const clock = document.getElementById(id);
+
+  for(let n = 1; n <= 12; n++) {
+
+    const el = document.createElement("div");
+
+    el.className = "num";
+    el.textContent = n;
+
+    const angle = n * Math.PI / 6;
+    const r = 41;
+
+    el.style.left =
+      (50 + Math.sin(angle) * r) + "%";
+
+    el.style.top =
+      (50 - Math.cos(angle) * r) + "%";
+
+    clock.appendChild(el);
+
+  }
+
+}
+
+addClockNumbers("demoClock");
+addClockNumbers("quizClock");
+
+
+// MOVIMIENTO DE LAS AGUJAS
+
+function setClock(hourId, minuteId, h, m) {
+
+  document.getElementById(minuteId).style.transform =
+    `translateX(-50%) rotate(${m * 6}deg)`;
+
+  document.getElementById(hourId).style.transform =
+    `translateX(-50%) rotate(${(h % 12) * 30 + m * 0.5}deg)`;
+
+}
+
+
+// RELOJ INTERACTIVO
+
+function showTime() {
+
+  const h = Number(
+    document.getElementById("timeHour").value
+  );
+
+  const m = Number(
+    document.getElementById("timeMinute").value
+  );
+
+  if(!Number.isInteger(h) || h < 0 || h > 23) {
+    document.getElementById("timeWords").textContent =
+      "Elegí una hora entre 0 y 23.";
+    return;
+  }
+
+  setClock("demoHour", "demoMinute", h, m);
+
+  document.getElementById("digitalTime").textContent =
+    String(h).padStart(2,"0") + ":" +
+    String(m).padStart(2,"0");
+
+  const nombres = [
+    "doce","una","dos","tres","cuatro","cinco",
+    "seis","siete","ocho","nueve","diez","once"
+  ];
+
+  let texto;
+
+  if(m === 0) {
+    texto = `Son las ${nombres[h % 12]} en punto.`;
+  }
+  else if(m === 30) {
+    texto = `Son las ${nombres[h % 12]} y media.`;
+  }
+  else {
+    texto = `Son las ${nombres[h % 12]} y ${m} minutos.`;
+  }
+
+  document.getElementById("timeWords").textContent = texto;
+
+}
+
+document.getElementById("showTime")
+  .addEventListener("click", showTime);
+
+showTime();
+
+
+// TABLAS
+
+const tablaSelect = document.getElementById("tablaSelect");
+
+for(let n = 1; n <= 10; n++) {
+
+  const op = document.createElement("option");
+
+  op.value = n;
+  op.textContent = n;
+
+  tablaSelect.appendChild(op);
+
+}
+
+function renderTable(n) {
+
+  const grid = document.getElementById("tableGrid");
+
+  grid.innerHTML = "";
+
+  for(let i = 1; i <= 10; i++) {
+
+    const cell = document.createElement("div");
+
+    cell.className = "fact";
+
+    cell.innerHTML =
+      `${n} × ${i} = <strong>${n * i}</strong>`;
+
+    grid.appendChild(cell);
+
+  }
+
+  document.getElementById("tip").textContent =
+    `La tabla del ${n} avanza de ${n} en ${n}.`;
+
+}
+
+tablaSelect.addEventListener("change", e => {
+  renderTable(Number(e.target.value));
+});
+
+document.getElementById("allTables")
+  .addEventListener("click", () => {
+
+    const grid = document.getElementById("tableGrid");
+
+    grid.innerHTML = "";
+
+    for(let n = 1; n <= 10; n++) {
+
+      const cell = document.createElement("div");
+
+      cell.className = "fact";
+
+      cell.innerHTML =
+        `<strong>Tabla del ${n}</strong><br>` +
+        Array.from({length:10}, (_,i) =>
+          `${n} × ${i+1} = ${n*(i+1)}`
+        ).join("<br>");
+
+      grid.appendChild(cell);
+
+    }
+
+    document.getElementById("tip").textContent =
+      "¡Compará las tablas y encontrá patrones!";
+
+  });
+
+renderTable(1);
+
+
+// JUEGO DE MULTIPLICACIONES
+
+let score = 0;
+let correct = 0;
+
+function newQuestion() {
+
+  const max = Number(
+    document.getElementById("level").value
+  );
+
+  const a = 1 + Math.floor(Math.random() * max);
+  const b = 1 + Math.floor(Math.random() * 10);
+
+  correct = a * b;
+
+  document.getElementById("question").textContent =
+    `${a} × ${b} = ¿?`;
+
+  const options = new Set([correct]);
+
+  while(options.size < 4) {
+
+    let v = correct + Math.floor(Math.random() * 13) - 6;
+
+    if(v >= 0) options.add(v);
+
+  }
+
+  const answers = [...options].sort(() => Math.random() - 0.5);
+
+  const container = document.getElementById("answers");
+
+  container.innerHTML = "";
+
+  answers.forEach(v => {
+
+    const button = document.createElement("button");
+
+    button.textContent = v;
+
+    button.addEventListener("click", () => {
+
+      const feedback = document.getElementById("gameFeedback");
+
+      if(v === correct) {
+
+        score++;
+
+        document.getElementById("score").textContent = score;
+
+        feedback.textContent =
+          "¡Muy bien! ¡Respuesta correcta! 🌟";
+
+        feedback.className = "feedback good";
+
+        [...container.children].forEach(b => {
+          b.disabled = true;
+        });
+
+      } else {
+
+        feedback.textContent =
+          "¡Casi! Probá otra vez. Vos podés.";
+
+        feedback.className = "feedback bad";
+
+      }
+
+    });
+
+    container.appendChild(button);
+
+  });
+
+  document.getElementById("gameFeedback").textContent = "";
+
+}
+
+document.getElementById("nextQuestion")
+  .addEventListener("click", newQuestion);
+
+document.getElementById("level")
+  .addEventListener("change", newQuestion);
+
+newQuestion();
+
+
+// JUEGO DE LEER LA HORA
+
+let targetH = 0;
+let targetM = 0;
+let clockScore = 0;
+
+function newQuizClock() {
+
+  targetH = Math.floor(Math.random() * 12) + 1;
+
+  targetM = Math.floor(Math.random() * 12) * 5;
+
+  setClock(
+    "quizHour",
+    "quizMinute",
+    targetH,
+    targetM
+  );
+
+  document.getElementById("guessHour").value = "";
+  document.getElementById("guessMinute").value = "";
+
+  document.getElementById("clockFeedback").textContent =
+    "¡Observá las agujas con atención!";
+
+  document.getElementById("clockFeedback").className =
+    "feedback";
+
+}
+
+document.getElementById("newClock")
+  .addEventListener("click", newQuizClock);
+
+document.getElementById("checkTime")
+  .addEventListener("click", () => {
+
+    const rawH = document.getElementById("guessHour").value;
+    const rawM = document.getElementById("guessMinute").value;
+
+    const feedback = document.getElementById("clockFeedback");
+
+    if(rawH === "" || rawM === "") {
+
+      feedback.textContent =
+        "Primero completá la hora y los minutos.";
+
+      return;
+
+    }
+
+    const h = Number(rawH);
+    const m = Number(rawM);
+
+    if(!Number.isInteger(h) || h < 1 || h > 12) {
+
+      feedback.textContent =
+        "La hora debe estar entre 1 y 12.";
+
+      return;
+
+    }
+
+    if(h === targetH && m === targetM) {
+
+      clockScore++;
+
+      document.getElementById("clockScore").textContent =
+        clockScore;
+
+      feedback.textContent =
+        "¡Excelente! ¡Leíste muy bien el reloj! 🎉";
+
+      feedback.className = "feedback good";
+
+    } else {
+
+      feedback.textContent =
+        "¡Todavía no! Recordá que cada número representa 5 minutos.";
+
+      feedback.className = "feedback bad";
+
+    }
+
+  });
+
+newQuizClock();
+
+</script>
+
+</body>
+</html>
